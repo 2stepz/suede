@@ -1,12 +1,10 @@
-from dotenv import load_dotenv
-import os
-import discord
+import os, discord
 from discord.ext import commands
-import datetime
-from datetime import datetime
-from typing import Optional
+from dotenv import load_dotenv
 
-bot = commands.Bot(command_prefix = ',', help_command = None)
+pfx = ','
+bot = commands.Bot(command_prefix = pfx, 
+help_command = None)
 
 @bot.event
 async def on_ready():
@@ -157,10 +155,10 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 # unban command
 @bot.command()
 @commands.has_permissions(ban_members=True)   
-async def unban(context, id : int):
+async def unban(ctx, id : int):
     member = await bot.fetch_user(id)
-    await context.guild.unban(member)
-    await context.send(f'{member} is unbanned')
+    await ctx.guild.unban(member)
+    await ctx.send(f'{member} is unbanned')
 
 # mute command
 @bot.command()
@@ -175,12 +173,12 @@ async def mute(ctx, member:discord.Member):
 # unmute command
 @bot.command()
 @commands.has_permissions(manage_roles = True)
-async def unmute(ctx, member:discord.Member):
+async def unmute(ctx, member : discord.Member):
   role = ctx.guild.get_role(966268284611723327)
   role2 = ctx.guild.get_role(944391240546394112)
   await member.add_roles(role2)
   await member.remove_roles(role)
-  await ctx.send(f'{user.name} was unmuted')
+  await ctx.send(f'{member} was unmuted')
 
 # lock command
 @bot.command()
