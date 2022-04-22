@@ -12,13 +12,6 @@ bot = commands.Bot(command_prefix = ',', help_command = None)
 async def on_ready():
   print('suede is online')
 
-
-# welcome message
-@bot.event
-async def on_member_join(member):
-  channel = bot.get_channel()
-  await channel.send(f'ty for joining, {member.mention}')
-
 # help command
 @bot.command()
 async def help(ctx):
@@ -75,9 +68,9 @@ async def membercount(member):
 async def userinfo(ctx, member : discord.Member = None):
   member = member or ctx.author
   embed = discord.Embed(title = f"*{member}'s info*",colour = 0x36393F)
-  embed.add_field(inline = False, name = '**id:**', value = member.created_at.strftime('**%#d %B %Y**'))
-  embed.add_field(inline = False, name = '**created at:**', value = member.created_at.strftime('**%#d %B %Y**'))
-  embed.add_field(inline = False, name = '**joined at:**', value = member.joined_at.strftime('**%#d %B %Y**'))
+  embed.add_field(inline = False, name = '**id:**', value = f'`{member.id}`')
+  embed.add_field(inline = False, name = '**created at:**', value = member.created_at.strftime('`%#d %B %Y`'))
+  embed.add_field(inline = False, name = '**joined at:**', value = member.joined_at.strftime('`%#d %B %Y`'))
   await ctx.send(embed = embed)
 
 # server icon command
@@ -136,7 +129,7 @@ async def addrole(ctx, member:discord.Member, *, role:discord.Role = None):
 @commands.has_permissions(manage_roles = True)
 async def removerole(ctx, member:discord.Member, *, role:discord.Role = None):
   await member.remove_roles(role)
-  await ctx.send(f'{role.mention} was taken from {member.mention}')
+  await ctx.send(f'{role} was taken from {member}')
 
 @bot.command()
 # createrole command
@@ -152,14 +145,22 @@ async def createrole(ctx, *, role:str = None):
 @commands.has_permissions(kick_members = True)
 async def kick(ctx, member : discord.Member, *, reason = None):
   await member.kick(reason = reason)
-  await ctx.send(f'{member.mention} was kicked')
+  await ctx.send(f'{member} was kicked')
 
 # ban command
 @bot.command()
 @commands.has_permissions(ban_members = True)
 async def ban(ctx, member : discord.Member, *, reason = None):
   await member.ban(reason = reason)
-  await ctx.send(f'{member.mention} was banned')
+  await ctx.send(f'{member.name} was banned')
+
+# unban command
+@bot.command()
+@commands.has_permissions(ban_members=True)   
+async def unban(context, id : int):
+    member = await bot.fetch_user(id)
+    await context.guild.unban(member)
+    await context.send(f'{member} is unbanned')
 
 # mute command
 @bot.command()
@@ -179,7 +180,7 @@ async def unmute(ctx, member:discord.Member):
   role2 = ctx.guild.get_role(944391240546394112)
   await member.add_roles(role2)
   await member.remove_roles(role)
-  await ctx.send(f'{member} was unmuted')
+  await ctx.send(f'{user.name} was unmuted')
 
 # lock command
 @bot.command()
@@ -202,6 +203,8 @@ async def unlock(ctx, *, reason = 'none'):
   await channel.set_permissions(ctx.guild.get_role(962518215991377953), overwrite = overwrite)
   embed = discord.Embed(title = 'unlocked', description = f'reason = {reason}', colour = 0x36393F)
   await channel.send(embed = embed)
+
+
 
 # misc
 
