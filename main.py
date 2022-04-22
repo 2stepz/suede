@@ -14,8 +14,8 @@ async def on_ready():
 @bot.command()
 async def help(ctx):
   em=discord.Embed(
-    title='*help*',
-    description='`utility , moderation`',
+    title='*✦ help*',
+    description='```utility , moderation```',
     colour=0x36393F
   )
   await ctx.send(embed=em)
@@ -24,11 +24,11 @@ async def help(ctx):
 @bot.command()
 async def utility(ctx):
   em=discord.Embed(
-    title='*utility*',
-    description='` ping , say , clear , avatar , membercount ,    \n userinfo , servericon , embed , send , perks   \n note `',
+    title='*✦ utility*',
+    description='``` ping , say , clear , avatar , membercount ,\n userinfo , servericon , embed , send , perks \n, note```',
     colour=0x36393F
   )
-  await ctx.send(embed=embed)
+  await ctx.send(embed=em)
 
 # util cmds
 
@@ -41,7 +41,7 @@ async def ping(ctx):
     description=f'`{ping}ms`',
     colour=0x36393F
   )
-  await ctx.send(em=embed)
+  await ctx.send(embed=em)
   
 # say command
 @bot.command()
@@ -148,11 +148,11 @@ async def perks(ctx):
     title='*boost & inv perks*',
     colour=0x36393F
   )
-  embed.add_field(
+  em.add_field(
     name='boost perks',
     value='` 1x bst = custom role + rich role + pic perms \n 2x bst = ^ + lowmod + bypass gw reqs         `'
   )
-  embed.add_field(
+  em.add_field(
     inline=False,
     name='invite perks',
     value='` 5x invs = custom role + pic perms            \n 10x invs = ^ + lowmod + gang role            `'
@@ -170,8 +170,8 @@ async def note(ctx, *, text: str):
 @bot.command()
 async def moderation(ctx):
   em=discord.Embed(
-    title='*moderation*',
-    description='` addrole , removerole , createrole , kick , ban \n , mute , unmute , lock , unlock `',
+    title='*✦ moderation*',
+    description='```addrole , removerole , createrole , deleterole\n , kick , ban , mute , unmute , lock , unlock```',
     colour=0x36393F
   )
   await ctx.send(embed=em)
@@ -201,6 +201,14 @@ async def createrole(ctx, *, role:str=None):
     permissions=perms
   )
   await ctx.send(f'{role} was created')
+
+# deleterole command
+@bot.command()
+@commands.has_permissions(manage_roles=True)
+async def deleterole(ctx, *, role:discord.Role):
+  guild=ctx.guild
+  await role.delete()
+  await ctx.send(f'{role} was deleted')
 
 # kick command
 @bot.command()
@@ -300,10 +308,10 @@ async def on_member_join(member):
   await channel.send(f'{member.mention}, welc to saudi\n{member.guild.member_count}')
 
 # error handling
-@bot.event
-async def on_command_error(ctx, error):
-  if isinstance(error, commands.CommandNotFound):
-    await ctx.send('wrong command')
+#@bot.event
+#async def on_command_error(ctx, error):
+#  if isinstance(error, commands.CommandNotFound):
+#    await ctx.send('wrong command')
 
 load_dotenv()
 TOKEN=os.getenv("BOT_TOKEN")
